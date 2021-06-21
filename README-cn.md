@@ -1,6 +1,6 @@
 # goxj
 
-[English](readme.md) | 简体中文
+[English](README.md) | 简体中文
 
 ## xjutils
 1. Page:数据分页显示结构

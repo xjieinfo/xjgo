@@ -1,6 +1,6 @@
 # goxj
 
-English | [简体中文](readme-cn.md)
+English | [简体中文](README-cn.md)
 
 ## xjutils
 1. Page:Data paging display structure
