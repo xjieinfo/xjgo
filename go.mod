@@ -1,3 +1,3 @@
-module gitee.com/xjieinfo/goxj
+module xjieinfo/goxj
 
 go 1.16
