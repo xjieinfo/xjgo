@@ -1,0 +1,10 @@
+.vscode
+.idea
+*.exe
+__debug_bin
+*/*.exe
+*/cache
+*/log
+
+
+
