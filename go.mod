@@ -1,4 +1,4 @@
-module github.com/xjieinfo/goxj
+module gitee.com/xjieinfo/xjgo
 
 go 1.16
 
