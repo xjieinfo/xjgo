@@ -8,18 +8,18 @@ import (
 //var jwtSecret=[]byte(conf.AppSetting.JwtSecret)
 
 type Claims struct {
-	Userid int    `json:"userid"`
-	Ext    string `json:"ext"`
+	User string `json:"user"`
+	Ext  string `json:"ext"`
 	jwt.StandardClaims
 }
 
 // 产生token的函数
-func GenerateToken(jwtSecret string, jwtExpire, userid int, ext string) (string, error) {
+func GenerateToken(jwtSecret string, jwtExpire int, user, ext string) (string, error) {
 	nowTime := time.Now()
 	expireTime := nowTime.Add(time.Duration(jwtExpire) * time.Minute)
 
 	claims := Claims{
-		userid,
+		user,
 		ext,
 		jwt.StandardClaims{
 			ExpiresAt: expireTime.Unix(),
