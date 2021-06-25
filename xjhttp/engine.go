@@ -23,13 +23,47 @@ func Default() *Engine {
 	}
 }
 
-func (engine *Engine) HandleFunc(method, pattern string, handler func(http.ResponseWriter, *http.Request)) {
+func (engine *Engine) HandleFunc(method, pattern string, handler func(*Context)) {
+	_handler := func(w http.ResponseWriter, r *http.Request) {
+		handler(&Context{
+			Request: r,
+			Writer:  w,
+		})
+	}
 	route := Route{
 		Method:  method,
 		Pattern: pattern,
-		Handler: handler,
+		Handler: _handler,
 	}
 	engine.routes = append(engine.routes, route)
+}
+
+func (engine *Engine) POST(pattern string, handler func(*Context)) {
+	engine.HandleFunc(http.MethodPost, pattern, handler)
+}
+
+func (engine *Engine) GET(pattern string, handler func(*Context)) {
+	engine.HandleFunc(http.MethodGet, pattern, handler)
+}
+
+func (engine *Engine) DELETE(pattern string, handler func(*Context)) {
+	engine.HandleFunc(http.MethodDelete, pattern, handler)
+}
+
+func (engine *Engine) PATCH(pattern string, handler func(*Context)) {
+	engine.HandleFunc(http.MethodPatch, pattern, handler)
+}
+
+func (engine *Engine) PUT(pattern string, handler func(*Context)) {
+	engine.HandleFunc(http.MethodPut, pattern, handler)
+}
+
+func (engine *Engine) OPTIONS(pattern string, handler func(*Context)) {
+	engine.HandleFunc(http.MethodOptions, pattern, handler)
+}
+
+func (engine *Engine) HEAD(pattern string, handler func(*Context)) {
+	engine.HandleFunc(http.MethodHead, pattern, handler)
 }
 
 func (engine *Engine) ServeHTTP(w http.ResponseWriter, r *http.Request) {
@@ -49,7 +83,8 @@ func (engine *Engine) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 	if len(mapHandle) == 0 {
-		fmt.Fprint(w, "404 Page Not Found!")
+		w.WriteHeader(404)
+		fmt.Fprint(w, "404, Page Not Found!")
 		return
 	}
 	handler := engine.GetHandle(mapHandle)

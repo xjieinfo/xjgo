@@ -1,4 +1,4 @@
-package xjutils
+package xjtypes
 
 type Page struct {
 	Current int         `json:"current""` //当前页

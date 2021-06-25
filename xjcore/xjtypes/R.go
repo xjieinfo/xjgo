@@ -1,4 +1,4 @@
-package xjutils
+package xjtypes
 
 import "time"
 

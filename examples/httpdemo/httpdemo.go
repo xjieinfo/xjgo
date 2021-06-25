@@ -1,33 +1,56 @@
 package main
 
 import (
-	"fmt"
 	"gitee.com/xjieinfo/xjgo/xjhttp"
-	"net/http"
 )
 
 func main() {
 	xjhttp := xjhttp.Default()
-	xjhttp.HandleFunc("GET", "/", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintf(w, "hello xjgo.")
-	})
-	xjhttp.HandleFunc("GET", "/ok", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintf(w, "ok.")
-	})
-	xjhttp.HandleFunc("GET", "/:order", order)
-	xjhttp.HandleFunc("GET", "/user/saler/:userName", saler)
-	xjhttp.HandleFunc("GET", "/user/:id/xyz", xyz)
-	xjhttp.Run(":7001")
+	xjhttp.HandleFunc("GET", "/str", Str)
+	xjhttp.GET("/success", Success)
+	xjhttp.GET("/fail", Fail)
+	xjhttp.GET("/make", Make)
+	xjhttp.POST("/:order", order)
+	xjhttp.PUT("/user/saler/:userName", saler)
+	xjhttp.DELETE("/user/:id/xyz", xyz)
+	xjhttp.GET("/ctx", okctx)
+	xjhttp.Run(":6001")
 }
 
-func order(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "order query.")
+func Str(ctx *xjhttp.Context) {
+	name := "xjgo"
+	ctx.String(200, "hello %s .", name)
 }
 
-func saler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "saler.")
+func Success(ctx *xjhttp.Context) {
+	data := struct {
+		Name string
+		Age  int
+	}{
+		Name: "ZhangSan",
+		Age:  18,
+	}
+	ctx.Success(200, data)
 }
 
-func xyz(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "xyz")
+func Fail(ctx *xjhttp.Context) {
+	ctx.Fail(200, "fail")
+}
+
+func Make(ctx *xjhttp.Context) {
+	ctx.Make(200, 101806, "data is error.", "access error")
+}
+func okctx(ctx *xjhttp.Context) {
+	ctx.JSON(200, "ok")
+}
+func order(ctx *xjhttp.Context) {
+	ctx.String(200, "order query.")
+}
+
+func saler(ctx *xjhttp.Context) {
+	ctx.String(200, "saler.")
+}
+
+func xyz(ctx *xjhttp.Context) {
+	ctx.String(200, "xyz")
 }
