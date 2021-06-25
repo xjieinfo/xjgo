@@ -6,6 +6,8 @@ import (
 	"gitee.com/xjieinfo/xjgo/xjcore/xjtypes"
 	"net/http"
 	"net/url"
+	"strconv"
+	"strings"
 )
 
 type Context struct {
@@ -20,6 +22,30 @@ func (c *Context) QueryAll() url.Values {
 func (c *Context) QueryStr(key string) string {
 	querys := c.Request.URL.Query()
 	return querys.Get(key)
+}
+
+func (c *Context) QueryInt(key string) (int, error) {
+	querys := c.Request.URL.Query()
+	str := querys.Get(key)
+	val, err := strconv.Atoi(str)
+	return val, err
+}
+
+func (c *Context) QueryInt64(key string) (int64, error) {
+	querys := c.Request.URL.Query()
+	str := querys.Get(key)
+	val, err := strconv.ParseInt(str, 10, 64)
+	return val, err
+}
+
+func (c *Context) PathParam(index int) string {
+	uri := c.Request.RequestURI
+	strs := strings.Split(uri, "/")
+	if len(strs) > index {
+		return strs[index]
+	} else {
+		return ""
+	}
 }
 
 func (c *Context) String(code int, format string, values ...interface{}) {
