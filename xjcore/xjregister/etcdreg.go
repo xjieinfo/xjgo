@@ -32,7 +32,7 @@ type Val struct {
 }
 
 func NewServiceRegister(etcd xjtypes.Etcd) *ServiceReg {
-	return NewServiceReg(etcd.Addrs, etcd.LeaseTime)
+	return NewServiceReg(etcd.Addrs, int64(etcd.LeaseTime))
 }
 func NewServiceReg(addr []string, timeNum int64) *ServiceReg {
 	log.Println("开始连接etcd...")

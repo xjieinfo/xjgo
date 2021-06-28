@@ -15,6 +15,17 @@ const (
 	dateFormart = "2006-01-02"
 )
 
+// GobEncode implements the gob.GobEncoder interface.
+func (t XjTime) GobEncode() ([]byte, error) {
+	return time.Time(t).MarshalBinary()
+}
+
+//GobDecode implements the gob.GobDecoder interface.
+func (t *XjTime) GobDecode(data []byte) error {
+	t1 := time.Time(*t)
+	return t1.UnmarshalBinary(data)
+}
+
 func (t *XjTime) UnmarshalJSON(data []byte) (err error) {
 	now, err := time.ParseInLocation(`"`+timeFormart+`"`, string(data), time.Local)
 	*t = XjTime(now)
@@ -133,6 +144,17 @@ func (t EsDate) MarshalJSON() ([]byte, error) {
 }
 
 type XjDate time.Time
+
+// GobEncode implements the gob.GobEncoder interface.
+func (t XjDate) GobEncode() ([]byte, error) {
+	return time.Time(t).MarshalBinary()
+}
+
+//GobDecode implements the gob.GobDecoder interface.
+func (t *XjDate) GobDecode(data []byte) error {
+	t1 := time.Time(*t)
+	return t1.UnmarshalBinary(data)
+}
 
 func (t *XjDate) UnmarshalJSON(data []byte) (err error) {
 	now, err := time.ParseInLocation(`"`+dateFormart+`"`, string(data), time.Local)

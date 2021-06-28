@@ -4,32 +4,32 @@ package xjtypes
 type App struct {
 	Name    string
 	Url     string
-	Port    uint64
-	Rpcport uint64
+	Port    int
+	Rpcport int
 }
 
 //如果服务都注册到ETCD,这个可以不要
 type Register struct {
 	Url  string
-	Port uint64
+	Port int
 }
 
 //如果服务间的调用都通过rpc,这个可以不要
 type Gateway struct {
 	Url  string
-	Port uint64
+	Port int
 }
 
 //如果配置使用本地配置文件, 这个可以不要
 type Config struct {
 	Url  string
-	Port uint64
+	Port int
 }
 
 //http和rpc服务的注册管理
 type Etcd struct {
 	Addrs     []string
-	LeaseTime int64
+	LeaseTime int
 }
 
 //jwt验证的密钥和有效时间
