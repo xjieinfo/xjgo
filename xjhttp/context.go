@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"gitee.com/xjieinfo/xjgo/xjcore/xjtypes"
+	"io/ioutil"
 	"net/http"
 	"net/url"
 	"strconv"
@@ -13,6 +14,26 @@ import (
 type Context struct {
 	Request *http.Request
 	Writer  http.ResponseWriter
+}
+
+func (c *Context) Form() url.Values {
+	c.Request.ParseForm()
+	return c.Request.Form
+}
+
+func (c *Context) BodyJson(obj interface{}) error {
+	str, err := c.Body()
+	if err != nil {
+		return err
+	}
+	err = json.Unmarshal([]byte(str), obj)
+	return err
+}
+
+func (c *Context) Body() (string, error) {
+	body, err := ioutil.ReadAll(c.Request.Body)
+	//c.Request.Body.Close()
+	return string(body), err
 }
 
 func (c *Context) QueryMap() (m map[string]interface{}) {
