@@ -17,6 +17,10 @@ type Context struct {
 	Writer  http.ResponseWriter
 }
 
+func (c *Context) GetHeader(key string) string {
+	return c.Request.Header.Get(key)
+}
+
 func (c *Context) Form() url.Values {
 	c.Request.ParseForm()
 	return c.Request.Form
