@@ -15,6 +15,19 @@ type Context struct {
 	Writer  http.ResponseWriter
 }
 
+func (c *Context) QueryMap() (m map[string]interface{}) {
+	m = make(map[string]interface{})
+	values := c.Request.URL.Query()
+	for k, v := range values {
+		if len(v) == 1 {
+			m[k] = v[0]
+		} else {
+			m[k] = v
+		}
+	}
+	return
+}
+
 func (c *Context) QueryAll() url.Values {
 	return c.Request.URL.Query()
 }
