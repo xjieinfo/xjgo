@@ -21,9 +21,11 @@ func (this *Client) Call(basePath, servicePath string, args interface{}, reply i
 func (this *Client) GetAddress(basePath string) string {
 	switch basePath {
 	case "/xjrpc/admin":
-		return "localhost:12002"
+		return "127.0.0.1:12002"
 	case "/xjrpc/member":
-		return "localhost:12003"
+		return "127.0.0.1:12003"
+	case "/xjrpc/product":
+		return "127.0.0.1:12004"
 	default:
 		return ""
 	}

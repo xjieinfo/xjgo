@@ -3,6 +3,7 @@ package xjhttp
 import (
 	"encoding/json"
 	"fmt"
+	"gitee.com/xjieinfo/xjgo/xjcore/xjstruct"
 	"gitee.com/xjieinfo/xjgo/xjcore/xjtypes"
 	"io/ioutil"
 	"net/http"
@@ -49,6 +50,12 @@ func (c *Context) QueryMap() (m map[string]interface{}) {
 	return
 }
 
+func (c *Context) QueryStruct(dst interface{}) {
+	m := c.QueryMap()
+	xjstruct.MapToStructWithOutTypeDeep(m, dst)
+	return
+}
+
 func (c *Context) QueryAll() url.Values {
 	return c.Request.URL.Query()
 }
@@ -62,6 +69,16 @@ func (c *Context) QueryInt(key string) (int, error) {
 	querys := c.Request.URL.Query()
 	str := querys.Get(key)
 	val, err := strconv.Atoi(str)
+	return val, err
+}
+
+func (c *Context) QueryIntDefault(key string, def int) (int, error) {
+	querys := c.Request.URL.Query()
+	str := querys.Get(key)
+	val, err := strconv.Atoi(str)
+	if err != nil {
+		val = def
+	}
 	return val, err
 }
 
