@@ -2,6 +2,7 @@ package xjhttp
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"gitee.com/xjieinfo/xjgo/xjcore/xjstruct"
 	"gitee.com/xjieinfo/xjgo/xjcore/xjtypes"
@@ -100,6 +101,28 @@ func (c *Context) PathParam(index int) string {
 		return strs[index]
 	} else {
 		return ""
+	}
+}
+
+func (c *Context) PathParamInt(index int) (int, error) {
+	uri := c.Request.RequestURI
+	strs := strings.Split(uri, "/")
+	if len(strs) > index {
+		i, err := strconv.Atoi(strs[index])
+		return i, err
+	} else {
+		return 0, errors.New("index error.")
+	}
+}
+
+func (c *Context) PathParamInt64(index int) (int64, error) {
+	uri := c.Request.RequestURI
+	strs := strings.Split(uri, "/")
+	if len(strs) > index {
+		i, err := strconv.ParseInt(strs[index], 10, 64)
+		return i, err
+	} else {
+		return 0, errors.New("index error.")
 	}
 }
 
