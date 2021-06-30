@@ -26,6 +26,8 @@ func (this *Client) GetAddress(basePath string) string {
 		return "127.0.0.1:12003"
 	case "/xjrpc/product":
 		return "127.0.0.1:12004"
+	case "/xjrpc/marketing":
+		return "127.0.0.1:12008"
 	default:
 		return ""
 	}

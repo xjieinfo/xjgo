@@ -3,6 +3,7 @@ package xjhttp
 import "gitee.com/xjieinfo/xjgo/xjcore/xjtypes"
 
 type AppConfig struct {
+	Profile       string                //dev,test,prod
 	App           xjtypes.App           //服务的名称等
 	Register      xjtypes.Register      //如果服务都注册到ETCD,这个可以不要
 	Gateway       xjtypes.Gateway       //如果服务间的调用都通过rpc,这个可以不要
