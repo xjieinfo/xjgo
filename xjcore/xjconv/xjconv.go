@@ -151,9 +151,40 @@ func InterfaceToDate(val interface{}) xjtypes.XjDate {
 		if len(strV) == 10 {
 			v, _ := time.ParseInLocation("2006-01-02", strV, time.Local)
 			return xjtypes.XjDate(v)
-		} else if len(strV) == 19 {
-			v, _ := time.ParseInLocation("2006-01-02 15:04:05", strV, time.Local)
+		} else if len(strV) >= 19 {
+			v, _ := time.ParseInLocation("2006-01-02 15:04:05", strV[:19], time.Local)
 			return xjtypes.XjDate(v)
+		} else {
+			return date
+		}
+	}
+	return date
+}
+
+func InterfaceToTime(val interface{}) xjtypes.XjTime {
+	var date xjtypes.XjTime
+	if val != nil {
+		strV := ""
+		switch val.(type) {
+		case bool:
+			strV = strconv.FormatBool(val.(bool))
+		case string:
+			strV = val.(string)
+		case int8, int, int32, int64:
+			strV = fmt.Sprintf("%d", val)
+		case float32:
+			strV = fmt.Sprintf("%f", val)
+		case float64:
+			strV = fmt.Sprintf("%f", val)
+		default:
+			strV = fmt.Sprintf("%s", val)
+		}
+		if len(strV) == 10 {
+			v, _ := time.ParseInLocation("2006-01-02", strV, time.Local)
+			return xjtypes.XjTime(v)
+		} else if len(strV) >= 19 {
+			v, _ := time.ParseInLocation("2006-01-02 15:04:05", strV[:19], time.Local)
+			return xjtypes.XjTime(v)
 		} else {
 			return date
 		}
