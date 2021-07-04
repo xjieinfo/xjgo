@@ -3,6 +3,7 @@ module gitee.com/xjieinfo/xjgo
 go 1.16
 
 require (
+	github.com/360EntSecGroup-Skylar/excelize/v2 v2.4.0
 	github.com/coreos/bbolt v1.3.3 // indirect
 	github.com/coreos/etcd v3.3.13+incompatible // indirect
 	github.com/coreos/go-semver v0.2.0 // indirect
