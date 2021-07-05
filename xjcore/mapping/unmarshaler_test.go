@@ -6,8 +6,8 @@ import (
 	"testing"
 	"time"
 
-	"gitee.com/xjieinfo/xjgo/xjcore/stringx"
 	"github.com/stretchr/testify/assert"
+	"github.com/xjieinfo/xjgo/xjcore/stringx"
 )
 
 // because json.Number doesn't support strconv.ParseUint(...),

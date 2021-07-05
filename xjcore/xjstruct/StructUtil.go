@@ -2,7 +2,7 @@ package xjstruct
 
 import (
 	"encoding/json"
-	"gitee.com/xjieinfo/xjgo/xjcore/xjtypes"
+	"github.com/xjieinfo/xjgo/xjcore/xjtypes"
 	"log"
 	"reflect"
 	"strconv"

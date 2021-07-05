@@ -15,7 +15,7 @@ import (
 	"strconv"
 	//	"sync"
 	//
-	"gitee.com/xjieinfo/xjgo/xjcore/stringx"
+	"github.com/xjieinfo/xjgo/xjcore/stringx"
 )
 
 const (

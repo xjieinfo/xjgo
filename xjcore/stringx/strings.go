@@ -3,7 +3,7 @@ package stringx
 import (
 	"errors"
 
-	"gitee.com/xjieinfo/xjgo/xjcore/lang"
+	"github.com/xjieinfo/xjgo/xjcore/lang"
 )
 
 var (

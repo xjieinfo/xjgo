@@ -1,7 +1,7 @@
 package xjgorm
 
 import (
-	"gitee.com/xjieinfo/xjgo/xjcore/xjtypes"
+	"github.com/xjieinfo/xjgo/xjcore/xjtypes"
 	"gorm.io/driver/mysql"
 	"gorm.io/driver/sqlserver"
 	"gorm.io/gorm"

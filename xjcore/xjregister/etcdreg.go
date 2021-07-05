@@ -4,7 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"gitee.com/xjieinfo/xjgo/xjcore/xjtypes"
+	"github.com/xjieinfo/xjgo/xjcore/xjtypes"
 	"go.etcd.io/etcd/clientv3"
 	"log"
 	"os"

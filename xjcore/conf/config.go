@@ -1,7 +1,7 @@
 package conf
 
 import (
-	"gitee.com/xjieinfo/xjgo/xjcore/mapping"
+	"github.com/xjieinfo/xjgo/xjcore/mapping"
 	"io/ioutil"
 )
 

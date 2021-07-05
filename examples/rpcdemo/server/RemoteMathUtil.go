@@ -1,7 +1,7 @@
 package main
 
 import (
-	"gitee.com/xjieinfo/xjgo/examples/rpcdemo"
+	"github.com/xjieinfo/xjgo/examples/rpcdemo"
 	"math"
 )
 

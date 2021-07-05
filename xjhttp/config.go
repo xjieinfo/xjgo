@@ -1,6 +1,6 @@
 package xjhttp
 
-import "gitee.com/xjieinfo/xjgo/xjcore/xjtypes"
+import "github.com/xjieinfo/xjgo/xjcore/xjtypes"
 
 type AppConfig struct {
 	Profile       string                //dev,test,prod

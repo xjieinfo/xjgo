@@ -10,9 +10,9 @@ import (
 	"sync/atomic"
 	"time"
 
-	"gitee.com/xjieinfo/xjgo/xjcore/jsonx"
-	"gitee.com/xjieinfo/xjgo/xjcore/lang"
-	"gitee.com/xjieinfo/xjgo/xjcore/stringx"
+	"github.com/xjieinfo/xjgo/xjcore/jsonx"
+	"github.com/xjieinfo/xjgo/xjcore/lang"
+	"github.com/xjieinfo/xjgo/xjcore/stringx"
 )
 
 const (

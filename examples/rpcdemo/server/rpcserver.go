@@ -1,8 +1,8 @@
 package main
 
 import (
-	"gitee.com/xjieinfo/xjgo/xjrpc"
 	"github.com/rcrowley/go-metrics"
+	"github.com/xjieinfo/xjgo/xjrpc"
 	"time"
 )
 

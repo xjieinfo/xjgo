@@ -2,7 +2,7 @@ package xjtoken
 
 import (
 	"errors"
-	"gitee.com/xjieinfo/xjgo/xjhttp"
+	"github.com/xjieinfo/xjgo/xjhttp"
 )
 
 //BearerToken格式为:bearer + token,取真正的token

@@ -1,6 +1,6 @@
 package stringx
 
-import "gitee.com/xjieinfo/xjgo/xjcore/lang"
+import "github.com/xjieinfo/xjgo/xjcore/lang"
 
 const defaultMask = '*'
 

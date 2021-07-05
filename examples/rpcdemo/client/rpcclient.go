@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
-	"gitee.com/xjieinfo/xjgo/examples/rpcdemo"
-	"gitee.com/xjieinfo/xjgo/xjrpc"
+	"github.com/xjieinfo/xjgo/examples/rpcdemo"
+	"github.com/xjieinfo/xjgo/xjrpc"
 	"log"
 	"net/rpc"
 )

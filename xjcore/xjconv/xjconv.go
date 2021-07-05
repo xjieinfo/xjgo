@@ -3,7 +3,7 @@ package xjconv
 import (
 	"encoding/json"
 	"fmt"
-	"gitee.com/xjieinfo/xjgo/xjcore/xjtypes"
+	"github.com/xjieinfo/xjgo/xjcore/xjtypes"
 	"strconv"
 	"strings"
 	"time"

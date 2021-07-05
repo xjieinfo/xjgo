@@ -1,8 +1,8 @@
 package xjredis
 
 import (
-	"gitee.com/xjieinfo/xjgo/xjcore/xjtypes"
 	"github.com/go-redis/redis"
+	"github.com/xjieinfo/xjgo/xjcore/xjtypes"
 	"log"
 	"os"
 )

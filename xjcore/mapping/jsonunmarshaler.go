@@ -3,7 +3,7 @@ package mapping
 import (
 	"io"
 
-	"gitee.com/xjieinfo/xjgo/xjcore/jsonx"
+	"github.com/xjieinfo/xjgo/xjcore/jsonx"
 )
 
 const jsonTagKey = "json"

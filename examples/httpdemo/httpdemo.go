@@ -1,7 +1,7 @@
 package main
 
 import (
-	"gitee.com/xjieinfo/xjgo/xjhttp"
+	"github.com/xjieinfo/xjgo/xjhttp"
 )
 
 func main() {
