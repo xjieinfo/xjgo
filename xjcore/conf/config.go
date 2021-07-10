@@ -1,7 +1,8 @@
 package conf
 
 import (
-	"github.com/xjieinfo/xjgo/xjcore/mapping"
+	//"github.com/xjieinfo/xjgo/xjcore/mapping"
+	"gopkg.in/yaml.v2"
 	"io/ioutil"
 )
 
@@ -11,7 +12,8 @@ func GetAppConfig(profile string, v interface{}) error {
 		filename = "./conf/conf-" + profile + ".yml"
 	}
 	content, _ := ioutil.ReadFile(filename)
-	return mapping.UnmarshalYamlBytes(content, v)
+	//return mapping.UnmarshalYamlBytes(content, v)
+	return yaml.Unmarshal(content, v)
 }
 
 func GetAppConfigStr(profile string) string {
