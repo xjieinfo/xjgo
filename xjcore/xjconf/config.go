@@ -1,4 +1,4 @@
-package conf
+package xjconf
 
 import (
 	//"github.com/xjieinfo/xjgo/xjcore/mapping"
