@@ -336,3 +336,18 @@ func Float64ToInt64(val float64) int64 {
 	}
 	return intval
 }
+
+func InterfaceMapToStringMap(s map[string]interface{}) (t map[string]string) {
+	t = make(map[string]string)
+	for k, item := range s {
+		t[k] = InterfaceToString(item)
+	}
+	return
+}
+
+func InterfaceMapsToStringMaps(s []map[string]interface{}) (t []map[string]string) {
+	for _, item := range s {
+		t = append(t, InterfaceMapToStringMap(item))
+	}
+	return
+}
