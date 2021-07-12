@@ -29,6 +29,10 @@ func (c *Context) Form() url.Values {
 	return c.Request.Form
 }
 
+func (c *Context) Bind(obj interface{}) error {
+	return c.BodyJson(obj)
+}
+
 func (c *Context) BodyJson(obj interface{}) error {
 	str, err := c.Body()
 	if err != nil {
@@ -80,6 +84,10 @@ func (c *Context) Query(key string) string {
 	return c.QueryStr(key)
 }
 
+func (c *Context) GetString(key string) string {
+	return c.QueryStr(key)
+}
+
 func (c *Context) QueryStr(key string) string {
 	querys := c.Request.URL.Query()
 	return querys.Get(key)
@@ -107,6 +115,17 @@ func (c *Context) QueryInt64(key string) (int64, error) {
 	str := querys.Get(key)
 	val, err := strconv.ParseInt(str, 10, 64)
 	return val, err
+}
+
+func (c *Context) Param(key string) string {
+	pattern := c.Request.Header.Get("xjgo-path-pattern")
+	paths := strings.Split(pattern, "/")
+	for i, item := range paths {
+		if item == ":"+key {
+			return c.PathParam(i)
+		}
+	}
+	return ""
 }
 
 func (c *Context) PathParam(index int) string {

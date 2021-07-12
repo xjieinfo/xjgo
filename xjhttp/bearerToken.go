@@ -1,12 +1,12 @@
-package xjtoken
+package xjhttp
 
 import (
 	"errors"
-	"github.com/xjieinfo/xjgo/xjhttp"
+	"github.com/xjieinfo/xjgo/xjcore/xjtoken"
 )
 
 //BearerToken格式为:bearer + token,取真正的token
-func GetBearerToken(ctx *xjhttp.Context) (string, error) {
+func GetBearerToken(ctx *Context) (string, error) {
 	Authorization := ctx.Request.Header.Get("Authorization")
 	if len(Authorization) < 8 {
 		err := errors.New("Authorization fail.")
@@ -17,7 +17,7 @@ func GetBearerToken(ctx *xjhttp.Context) (string, error) {
 }
 
 func GetUserFromToken(token, AccessSecret string) (user string, err error) {
-	tokenClaims, err1 := ParseToken(AccessSecret, token)
+	tokenClaims, err1 := xjtoken.ParseToken(AccessSecret, token)
 	if err1 != nil {
 		err = err1
 		return
@@ -27,7 +27,7 @@ func GetUserFromToken(token, AccessSecret string) (user string, err error) {
 }
 
 func GetExtFromToken(token, AccessSecret string) (ext string, err error) {
-	tokenClaims, err1 := ParseToken(AccessSecret, token)
+	tokenClaims, err1 := xjtoken.ParseToken(AccessSecret, token)
 	if err1 != nil {
 		err = err1
 		return
@@ -37,7 +37,7 @@ func GetExtFromToken(token, AccessSecret string) (ext string, err error) {
 }
 
 func GetAllFromToken(token, AccessSecret string) (user, ext string, err error) {
-	tokenClaims, err1 := ParseToken(AccessSecret, token)
+	tokenClaims, err1 := xjtoken.ParseToken(AccessSecret, token)
 	if err1 != nil {
 		err = err1
 		return
@@ -47,7 +47,7 @@ func GetAllFromToken(token, AccessSecret string) (user, ext string, err error) {
 	return
 }
 
-func GetUserFromBearerToken(ctx *xjhttp.Context, AccessSecret string) (user string, err error) {
+func GetUserFromBearerToken(ctx *Context, AccessSecret string) (user string, err error) {
 	token, err := GetBearerToken(ctx)
 	if err != nil {
 		return "0", err
@@ -56,7 +56,7 @@ func GetUserFromBearerToken(ctx *xjhttp.Context, AccessSecret string) (user stri
 	return
 }
 
-func GetAllFromBearerToken(ctx *xjhttp.Context, AccessSecret string) (user, ext string, err error) {
+func GetAllFromBearerToken(ctx *Context, AccessSecret string) (user, ext string, err error) {
 	token, err := GetBearerToken(ctx)
 	if err != nil {
 		return "0", "", err

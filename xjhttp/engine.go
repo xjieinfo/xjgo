@@ -81,7 +81,8 @@ func (engine *Engine) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	//静态目录匹配
 	for k, v := range engine.static {
 		if strings.Index(r.URL.Path, k) == 0 {
-			http.StripPrefix(k, http.FileServer(http.Dir(v)))
+			fileServer := http.StripPrefix(k, http.FileServer(http.Dir(v)))
+			fileServer.ServeHTTP(w, r)
 			return
 		}
 	}
@@ -93,34 +94,35 @@ func (engine *Engine) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 	//路径参数匹配
-	mapHandle := make(map[int]http.HandlerFunc)
+	mapRoute := make(map[int]Route)
 	for _, route := range engine.routes {
 		if r.Method == route.Method {
 			matchi := engine.PathMatch(r.URL.Path, route.Pattern)
 			if matchi > 0 {
-				mapHandle[matchi] = route.Handler
+				mapRoute[matchi] = route
 			}
 		}
 	}
-	if len(mapHandle) == 0 {
+	if len(mapRoute) == 0 {
 		w.WriteHeader(404)
 		fmt.Fprint(w, "404, Page Not Found!")
 		return
 	}
-	handler := engine.GetHandle(mapHandle)
-	handler(w, r)
+	route := engine.GetRoute(mapRoute)
+	r.Header.Set("xjgo-path-pattern", route.Pattern)
+	route.Handler(w, r)
 }
 
-func (engine *Engine) GetHandle(mapHandle map[int]http.HandlerFunc) http.HandlerFunc {
+func (engine *Engine) GetRoute(mapRoute map[int]Route) Route {
 	max := 0
-	var handler http.HandlerFunc
-	for k, v := range mapHandle {
+	var route Route
+	for k, v := range mapRoute {
 		if k > max {
 			max = k
-			handler = v
+			route = v
 		}
 	}
-	return handler
+	return route
 }
 
 func (engine *Engine) PathMatch(path, pattern string) int {
