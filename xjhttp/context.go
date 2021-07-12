@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"github.com/xjieinfo/xjgo/xjcache"
 	"github.com/xjieinfo/xjgo/xjcore/xjstruct"
 	"github.com/xjieinfo/xjgo/xjcore/xjtypes"
 	"io/ioutil"
@@ -14,8 +15,9 @@ import (
 )
 
 type Context struct {
-	Request *http.Request
-	Writer  http.ResponseWriter
+	Request  *http.Request
+	Writer   http.ResponseWriter
+	CacheMgr *xjcache.CacheMgr
 }
 
 func (c *Context) GetHeader(key string) string {
@@ -63,6 +65,19 @@ func (c *Context) QueryStruct(dst interface{}) {
 
 func (c *Context) QueryAll() url.Values {
 	return c.Request.URL.Query()
+}
+
+func (c *Context) DefaultQuery(key, def string) string {
+	val := c.QueryStr(key)
+	if val == "" {
+		return def
+	} else {
+		return val
+	}
+}
+
+func (c *Context) Query(key string) string {
+	return c.QueryStr(key)
 }
 
 func (c *Context) QueryStr(key string) string {

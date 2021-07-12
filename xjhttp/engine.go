@@ -8,7 +8,9 @@ import (
 )
 
 type Engine struct {
-	routes []Route //map[string]http.HandlerFunc
+	routes   []Route //map[string]http.HandlerFunc
+	static   map[string]string
+	redirect map[string]string
 }
 
 type Route struct {
@@ -19,7 +21,9 @@ type Route struct {
 
 func Default() *Engine {
 	return &Engine{
-		routes: make([]Route, 0),
+		routes:   make([]Route, 0),
+		static:   make(map[string]string),
+		redirect: make(map[string]string),
 	}
 }
 
@@ -67,12 +71,28 @@ func (engine *Engine) HEAD(pattern string, handler func(*Context)) {
 }
 
 func (engine *Engine) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	//跳转
+	for k, v := range engine.redirect {
+		if r.URL.Path == k {
+			r.URL.Path = v
+			break
+		}
+	}
+	//静态目录匹配
+	for k, v := range engine.static {
+		if strings.Index(r.URL.Path, k) == 0 {
+			http.StripPrefix(k, http.FileServer(http.Dir(v)))
+			return
+		}
+	}
+	//完全匹配
 	for _, route := range engine.routes {
 		if r.Method == route.Method && r.URL.Path == route.Pattern {
 			route.Handler(w, r)
 			return
 		}
 	}
+	//路径参数匹配
 	mapHandle := make(map[int]http.HandlerFunc)
 	for _, route := range engine.routes {
 		if r.Method == route.Method {
@@ -121,6 +141,14 @@ func (engine *Engine) PathMatch(path, pattern string) int {
 	}
 	matchi, _ := strconv.Atoi(match)
 	return matchi
+}
+
+func (engine *Engine) Static(relativePath, root string) {
+	engine.static[relativePath] = root
+}
+
+func (engine *Engine) Redirect(relativePath, root string) {
+	engine.redirect[relativePath] = root
 }
 
 func (engine *Engine) Run(address string) (err error) {
