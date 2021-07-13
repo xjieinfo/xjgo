@@ -6,6 +6,7 @@ import (
 	"log"
 	"reflect"
 	"strconv"
+	"strings"
 	"time"
 )
 
@@ -207,8 +208,11 @@ func MapToStructWithOutTypeDeep(src map[string]interface{}, dst interface{}) int
 		//println(key)
 		dvalue := dval.FieldByName(key)
 		if !dvalue.IsValid() {
-			//log.Printf("%s is not found. \n", key)
-			continue
+			key = UnderlineLargeLetters(key)
+			dvalue = dval.FieldByName(key)
+			if !dvalue.IsValid() {
+				continue
+			}
 		}
 		valueStr := ""
 		srcType := ""
@@ -342,4 +346,13 @@ func MapToStructWithOutTypeDeep(src map[string]interface{}, dst interface{}) int
 		}
 	}
 	return dst
+}
+
+func UnderlineLargeLetters(str string) string {
+	index := strings.Index(str, "_")
+	for index > -1 {
+		str = str[:index] + Capitalize(str[index+1:])
+		index = strings.Index(str, "_")
+	}
+	return str
 }
