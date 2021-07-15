@@ -2,6 +2,7 @@ package xjhttp
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 	"strconv"
 	"strings"
@@ -86,6 +87,7 @@ func (engine *Engine) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	//跳转
 	for k, v := range engine.redirect {
 		if r.URL.Path == k {
+			log.Printf("%s redirect to: %s \n", k, v)
 			r.URL.Path = v
 			break
 		}
@@ -93,6 +95,7 @@ func (engine *Engine) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	//静态目录匹配
 	for k, v := range engine.static {
 		if strings.Index(r.URL.Path, k) == 0 {
+			log.Printf("%s of static: %s \n", r.URL.Path, k)
 			fileServer := http.StripPrefix(k, http.FileServer(http.Dir(v)))
 			fileServer.ServeHTTP(w, r)
 			return
@@ -101,6 +104,7 @@ func (engine *Engine) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	//完全匹配
 	for _, route := range engine.routes {
 		if r.Method == route.Method && r.URL.Path == route.Pattern {
+			log.Printf("method: %s, path: %s \n", route.Method, r.RequestURI)
 			route.Handlers[0](&Context{Request: r, Writer: w, handlers: route.Handlers})
 			return
 		}
@@ -122,6 +126,7 @@ func (engine *Engine) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 	route := engine.GetRoute(mapRoute)
 	r.Header.Set("xjgo-path-pattern", route.Pattern)
+	log.Printf("method: %s, path: %s, pattern: %s \n", route.Method, r.RequestURI, route.Pattern)
 	route.Handlers[0](&Context{Request: r, Writer: w, handlers: route.Handlers})
 }
 
