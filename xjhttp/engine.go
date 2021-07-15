@@ -88,8 +88,13 @@ func (engine *Engine) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	for k, v := range engine.redirect {
 		if r.URL.Path == k {
 			log.Printf("%s redirect to: %s \n", k, v)
-			r.URL.Path = v
-			break
+			//r.URL.Path = v
+			//break
+			w.Header().Set("Cache-Control", "must-revalidate, no-store")
+			w.Header().Set("Content-Type", " text/html;charset=UTF-8")
+			w.Header().Set("Location", v) //跳转地址设置
+			w.WriteHeader(307)            //关键在这里！
+			return
 		}
 	}
 	//静态目录匹配
