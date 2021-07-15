@@ -18,6 +18,8 @@ type Context struct {
 	Request  *http.Request
 	Writer   http.ResponseWriter
 	CacheMgr *xjcache.CacheMgr
+	index    int
+	handlers []HandlerFunc
 }
 
 func (c *Context) GetHeader(key string) string {
@@ -197,4 +199,16 @@ func (c *Context) Error(code int, err error) {
 	r := new(xjtypes.R).Fail(err.Error())
 	j, _ := json.Marshal(r)
 	fmt.Fprintf(c.Writer, string(j))
+}
+
+func (c *Context) Next() {
+	c.index++
+	for c.index < len(c.handlers) {
+		c.handlers[c.index](c)
+		c.index++
+	}
+}
+
+func (c *Context) Abort() {
+	c.index = 100
 }

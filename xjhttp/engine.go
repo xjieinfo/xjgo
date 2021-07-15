@@ -8,36 +8,43 @@ import (
 )
 
 type Engine struct {
-	routes   []Route //map[string]http.HandlerFunc
-	static   map[string]string
-	redirect map[string]string
+	routes      []Route //map[string]http.HandlerFunc
+	static      map[string]string
+	redirect    map[string]string
+	useHandlers []HandlerFunc //拦截的处理函数
 }
 
 type Route struct {
-	Method  string
-	Pattern string
-	Handler http.HandlerFunc
+	Method   string
+	Pattern  string
+	Handlers []HandlerFunc
 }
 
 func Default() *Engine {
 	return &Engine{
-		routes:   make([]Route, 0),
-		static:   make(map[string]string),
-		redirect: make(map[string]string),
+		routes:      make([]Route, 0),
+		static:      make(map[string]string),
+		redirect:    make(map[string]string),
+		useHandlers: make([]HandlerFunc, 0),
 	}
 }
 
+type HandlerFunc func(*Context)
+
 func (engine *Engine) HandleFunc(method, pattern string, handler func(*Context)) {
-	_handler := func(w http.ResponseWriter, r *http.Request) {
-		handler(&Context{
-			Request: r,
-			Writer:  w,
-		})
-	}
+	//_handler := func(w http.ResponseWriter, r *http.Request) {
+	//	handler(&Context{
+	//		Request: r,
+	//		Writer:  w,
+	//	})
+	//}
+	_handlers := make([]HandlerFunc, 0)
+	_handlers = append(_handlers, engine.useHandlers...)
+	_handlers = append(_handlers, handler)
 	route := Route{
-		Method:  method,
-		Pattern: pattern,
-		Handler: _handler,
+		Method:   method,
+		Pattern:  pattern,
+		Handlers: _handlers,
 	}
 	engine.routes = append(engine.routes, route)
 }
@@ -70,6 +77,11 @@ func (engine *Engine) HEAD(pattern string, handler func(*Context)) {
 	engine.HandleFunc(http.MethodHead, pattern, handler)
 }
 
+// Use attaches a global middleware to the router.
+func (engine *Engine) Use(handler func(*Context)) {
+	engine.useHandlers = append(engine.useHandlers, handler)
+}
+
 func (engine *Engine) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	//跳转
 	for k, v := range engine.redirect {
@@ -89,7 +101,7 @@ func (engine *Engine) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	//完全匹配
 	for _, route := range engine.routes {
 		if r.Method == route.Method && r.URL.Path == route.Pattern {
-			route.Handler(w, r)
+			route.Handlers[0](&Context{Request: r, Writer: w, handlers: route.Handlers})
 			return
 		}
 	}
@@ -110,7 +122,7 @@ func (engine *Engine) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 	route := engine.GetRoute(mapRoute)
 	r.Header.Set("xjgo-path-pattern", route.Pattern)
-	route.Handler(w, r)
+	route.Handlers[0](&Context{Request: r, Writer: w, handlers: route.Handlers})
 }
 
 func (engine *Engine) GetRoute(mapRoute map[int]Route) Route {
