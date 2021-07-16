@@ -126,7 +126,8 @@ func (engine *Engine) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 	if len(mapRoute) == 0 {
 		w.WriteHeader(404)
-		fmt.Fprint(w, "404, Page Not Found!")
+		//fmt.Fprint(w, "404, Page Not Found!")
+		log.Printf("404,method: %s, path: %s \n", r.Method, r.RequestURI)
 		return
 	}
 	route := engine.GetRoute(mapRoute)
