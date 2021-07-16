@@ -8,6 +8,7 @@ import (
 	"github.com/xjieinfo/xjgo/xjcore/xjstruct"
 	"github.com/xjieinfo/xjgo/xjcore/xjtypes"
 	"io/ioutil"
+	"mime/multipart"
 	"net/http"
 	"net/url"
 	"strconv"
@@ -130,6 +131,45 @@ func (c *Context) Param(key string) string {
 	return ""
 }
 
+func (c *Context) ParamInt(key string) (int, error) {
+	pattern := c.Request.Header.Get("xjgo-path-pattern")
+	paths := strings.Split(pattern, "/")
+	for i, item := range paths {
+		if item == ":"+key {
+			str := c.PathParam(i)
+			val, err := strconv.Atoi(str)
+			return val, err
+		}
+	}
+	return 0, errors.New("not found")
+}
+
+func (c *Context) ParamInt64(key string) (int64, error) {
+	pattern := c.Request.Header.Get("xjgo-path-pattern")
+	paths := strings.Split(pattern, "/")
+	for i, item := range paths {
+		if item == ":"+key {
+			str := c.PathParam(i)
+			val, err := strconv.ParseInt(str, 10, 64)
+			return val, err
+		}
+	}
+	return 0, errors.New("not found")
+}
+
+func (c *Context) ParamFloat64(key string) (float64, error) {
+	pattern := c.Request.Header.Get("xjgo-path-pattern")
+	paths := strings.Split(pattern, "/")
+	for i, item := range paths {
+		if item == ":"+key {
+			str := c.PathParam(i)
+			val, err := strconv.ParseFloat(str, 64)
+			return val, err
+		}
+	}
+	return 0, errors.New("not found")
+}
+
 func (c *Context) PathParam(index int) string {
 	uri := c.Request.RequestURI
 	strs := strings.Split(uri, "/")
@@ -211,4 +251,9 @@ func (c *Context) Next() {
 
 func (c *Context) Abort() {
 	c.index = 100
+}
+
+func (c *Context) MultipartForm() (*multipart.Form, error) {
+	err := c.Request.ParseMultipartForm(10 * 1024 * 1024)
+	return c.Request.MultipartForm, err
 }
