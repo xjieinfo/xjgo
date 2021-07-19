@@ -2,6 +2,7 @@ package xjrpc
 
 import (
 	"fmt"
+	"github.com/xjieinfo/xjgo/xjcore/xjregister"
 	"net"
 	"net/http"
 	"net/rpc"
@@ -17,6 +18,8 @@ func NewServer() *Server {
 
 func (s *Server) EtcdRegister(etcdRegister EtcdRegister) {
 	s.etcdRegister = etcdRegister
+	s.etcdRegister.ServiceReg = xjregister.NewServiceReg(s.etcdRegister.EtcdServers, int64(s.etcdRegister.LeaseTime))
+	s.etcdRegister.ServiceReg.PutRpc(s.etcdRegister.BasePath+"/"+s.etcdRegister.RpcAddress, "")
 }
 
 func (s *Server) RegisterName(name string, rcvr interface{}, metadata string) error {

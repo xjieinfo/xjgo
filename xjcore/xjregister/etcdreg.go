@@ -137,6 +137,26 @@ func (this *ServiceReg) PutService(key, val string) error {
 	return err
 }
 
+//通过租约 注册rpc服务
+func (this *ServiceReg) PutRpc(key, val string) error {
+	kv := clientv3.NewKV(this.client)
+	key = "/xjrpc" + key
+	if val == "" {
+		value := Val{
+			StartTime:  time.Now().Format("2006-01-02 15:04:05"),
+			UpdateTime: time.Now().Format("2006-01-02 15:04:05"),
+			Status:     1,
+			Weight:     1,
+			Metatata:   "",
+			Health:     1,
+		}
+		data, _ := json.Marshal(&value)
+		val = string(data)
+	}
+	_, err := kv.Put(context.TODO(), key, val, clientv3.WithLease(this.leaseResp.ID))
+	return err
+}
+
 //撤销租约
 func (this *ServiceReg) RevokeLease() error {
 	this.canclefunc()

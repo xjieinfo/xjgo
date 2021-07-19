@@ -1,6 +1,7 @@
 package xjrpc
 
 import (
+	"github.com/xjieinfo/xjgo/xjcore/xjregister"
 	"sync"
 	"time"
 
@@ -26,6 +27,9 @@ type EtcdRegister struct {
 	metasLock      sync.RWMutex
 	metas          map[string]string
 	UpdateInterval time.Duration
+	LeaseTime      int
+	ServiceReg     *xjregister.ServiceReg
+	RpcAddress     string
 
 	Options *store.Config
 	kv      store.Store
