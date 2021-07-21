@@ -64,6 +64,10 @@ func (c *Context) QueryMap() (m map[string]interface{}) {
 	return
 }
 
+func (c *Context) BindQuery(dst interface{}) {
+	c.QueryStruct(dst)
+}
+
 func (c *Context) QueryStruct(dst interface{}) {
 	m := c.QueryMap()
 	xjstruct.MapToStructWithOutTypeDeep(m, dst)
