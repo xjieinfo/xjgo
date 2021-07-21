@@ -25,6 +25,42 @@ func (this *GormWrapper) Eq(field string, val interface{}) *GormWrapper {
 	return this
 }
 
+func (this *GormWrapper) Ge(field string, val interface{}) *GormWrapper {
+	if this.Where != "" {
+		this.Where += " and "
+	}
+	this.Where += field + ">=?"
+	if this.Args == nil || len(this.Args) == 0 {
+		this.Args = make([]interface{}, 0)
+	}
+	this.Args = append(this.Args, val)
+	return this
+}
+
+func (this *GormWrapper) Le(field string, val interface{}) *GormWrapper {
+	if this.Where != "" {
+		this.Where += " and "
+	}
+	this.Where += field + "<=?"
+	if this.Args == nil || len(this.Args) == 0 {
+		this.Args = make([]interface{}, 0)
+	}
+	this.Args = append(this.Args, val)
+	return this
+}
+
+func (this *GormWrapper) Like(field string, val interface{}) *GormWrapper {
+	if this.Where != "" {
+		this.Where += " and "
+	}
+	this.Where += field + "like('%',?,'%')"
+	if this.Args == nil || len(this.Args) == 0 {
+		this.Args = make([]interface{}, 0)
+	}
+	this.Args = append(this.Args, val)
+	return this
+}
+
 func (this *GormWrapper) In(field string, val interface{}) *GormWrapper {
 	if this.Where != "" {
 		this.Where += " and "
@@ -35,6 +71,13 @@ func (this *GormWrapper) In(field string, val interface{}) *GormWrapper {
 	}
 	this.Args = append(this.Args, val.([]interface{})...)
 	return this
+}
+
+func (this *GormWrapper) OrderByDesc(field string) {
+	if this.Orderby != "" {
+		this.Orderby += ","
+	}
+	this.Orderby += field + " desc"
 }
 
 func (this *GormWrapper) SetDb(db *gorm.DB) *gorm.DB {
