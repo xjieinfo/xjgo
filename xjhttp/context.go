@@ -8,6 +8,7 @@ import (
 	"github.com/xjieinfo/xjgo/xjcore/xjstruct"
 	"github.com/xjieinfo/xjgo/xjcore/xjtypes"
 	"io/ioutil"
+	"log"
 	"mime/multipart"
 	"net/http"
 	"net/url"
@@ -260,4 +261,9 @@ func (c *Context) Abort() {
 func (c *Context) MultipartForm() (*multipart.Form, error) {
 	err := c.Request.ParseMultipartForm(10 * 1024 * 1024)
 	return c.Request.MultipartForm, err
+}
+
+func (c *Context) TraceInfo(msg string) {
+	traceid := c.Request.Header.Get("traceid")
+	log.Printf("[%s] %s\n", traceid, msg)
 }
