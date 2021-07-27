@@ -2,6 +2,7 @@ package xjhttp
 
 import (
 	"fmt"
+	"github.com/google/uuid"
 	"log"
 	"net/http"
 	"strconv"
@@ -110,6 +111,7 @@ func (engine *Engine) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	for _, route := range engine.routes {
 		if r.Method == route.Method && r.URL.Path == route.Pattern {
 			log.Printf("method: %s, path: %s \n", route.Method, r.RequestURI)
+			r.Header.Set("traceid", uuid.New().String())
 			route.Handlers[0](&Context{Request: r, Writer: w, handlers: route.Handlers})
 			return
 		}
@@ -132,6 +134,7 @@ func (engine *Engine) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 	route := engine.GetRoute(mapRoute)
 	r.Header.Set("xjgo-path-pattern", route.Pattern)
+	r.Header.Set("traceid", uuid.New().String())
 	log.Printf("method: %s, path: %s, pattern: %s \n", route.Method, r.RequestURI, route.Pattern)
 	route.Handlers[0](&Context{Request: r, Writer: w, handlers: route.Handlers})
 }

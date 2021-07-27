@@ -65,11 +65,11 @@ func (this *GormWrapper) In(field string, val interface{}) *GormWrapper {
 	if this.Where != "" {
 		this.Where += " and "
 	}
-	this.Where += field + "in(?)"
+	this.Where += field + " in(?)"
 	if this.Args == nil || len(this.Args) == 0 {
 		this.Args = make([]interface{}, 0)
 	}
-	this.Args = append(this.Args, val.([]interface{})...)
+	this.Args = append(this.Args, val)
 	return this
 }
 
