@@ -61,7 +61,7 @@ func (this *Client) EtcdList(key string) []string {
 		return nil
 	}
 
-	fmt.Println("connect succ")
+	//fmt.Println("connect success")
 	defer cli.Close()
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 	resp, err := cli.Get(ctx, key, clientv3.WithPrefix())
