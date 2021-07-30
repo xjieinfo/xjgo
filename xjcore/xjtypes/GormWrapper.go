@@ -11,6 +11,15 @@ type GormWrapper struct {
 	Orderby string
 	Current int
 	Size    int
+	Sets    map[string]interface{}
+}
+
+func (this *GormWrapper) Set(field string, val interface{}) *GormWrapper {
+	if this.Sets == nil {
+		this.Sets = make(map[string]interface{})
+	}
+	this.Sets[field] = val
+	return this
 }
 
 func (this *GormWrapper) Eq(field string, val interface{}) *GormWrapper {

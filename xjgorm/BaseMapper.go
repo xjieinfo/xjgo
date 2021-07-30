@@ -45,6 +45,26 @@ func (this BaseMapper) FindCount(wrapper *xjtypes.GormWrapper, list interface{},
 	return err
 }
 
+func (this BaseMapper) Update(wrapper *xjtypes.GormWrapper, item interface{}, column string, value interface{}) (bool, error) {
+	db := wrapper.SetDb(this.Gorm).Model(item).Update(column, value)
+	return db.RowsAffected > 0, db.Error
+}
+
+func (this BaseMapper) Updates(wrapper *xjtypes.GormWrapper, item interface{}, values interface{}) (bool, error) {
+	db := wrapper.SetDb(this.Gorm).Model(item).Updates(values)
+	return db.RowsAffected > 0, db.Error
+}
+
+func (this BaseMapper) UpdatesItem(wrapper *xjtypes.GormWrapper, item interface{}) (bool, error) {
+	db := wrapper.SetDb(this.Gorm).Model(item).Updates(wrapper.Sets)
+	return db.RowsAffected > 0, db.Error
+}
+
+func (this BaseMapper) UpdatesTable(wrapper *xjtypes.GormWrapper, table string) (bool, error) {
+	db := wrapper.SetDb(this.Gorm).Table(table).Updates(wrapper.Sets)
+	return db.RowsAffected > 0, db.Error
+}
+
 func getTableName(item interface{}) string {
 	vType := reflect.TypeOf(item)
 	vValue := reflect.ValueOf(item)
