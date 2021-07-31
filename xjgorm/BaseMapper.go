@@ -1,6 +1,7 @@
 package xjgorm
 
 import (
+	"github.com/xjieinfo/xjgo/xjcore/xjconv"
 	"github.com/xjieinfo/xjgo/xjcore/xjtypes"
 	"gorm.io/gorm"
 	"reflect"
@@ -30,9 +31,38 @@ func (this BaseMapper) First(wrapper *xjtypes.GormWrapper, item interface{}) err
 	return err
 }
 
+func (this BaseMapper) FirstString(sql string, args []interface{}) (item map[string]string, err error) {
+	result := make(map[string]interface{})
+	err = this.Gorm.Raw(sql, args...).First(&result).Error
+	if err != nil {
+		return
+	}
+	item = make(map[string]string)
+	for k, v := range result {
+		item[k] = xjconv.InterfaceToString(v)
+	}
+	return
+}
+
 func (this BaseMapper) Find(wrapper *xjtypes.GormWrapper, list interface{}) error {
 	err := wrapper.SetDb(this.Gorm).Find(list).Error
 	return err
+}
+
+func (this BaseMapper) FindString(sql string, args []interface{}) (list []map[string]string, err error) {
+	var result []map[string]interface{}
+	err = this.Gorm.Raw(sql, args...).Find(&result).Error
+	if err != nil {
+		return
+	}
+	for _, item := range result {
+		it := make(map[string]string)
+		for k, v := range item {
+			it[k] = xjconv.InterfaceToString(v)
+		}
+		list = append(list, it)
+	}
+	return
 }
 
 func (this BaseMapper) Count(wrapper *xjtypes.GormWrapper, item interface{}, total *int64) error {
