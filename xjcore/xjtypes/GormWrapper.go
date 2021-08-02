@@ -82,6 +82,14 @@ func (this *GormWrapper) In(field string, val interface{}) *GormWrapper {
 	return this
 }
 
+func (this *GormWrapper) InSql(field string, val string) *GormWrapper {
+	if this.Where != "" {
+		this.Where += " and "
+	}
+	this.Where += field + " in(" + val + ")"
+	return this
+}
+
 func (this *GormWrapper) OrderByDesc(field string) {
 	if this.Orderby != "" {
 		this.Orderby += ","
