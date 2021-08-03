@@ -61,6 +61,15 @@ func InterfaceArrayToIntArray(src []interface{}) ([]int, error) {
 	return ints, nil
 }
 
+func InterfaceArrayToStringArray(src []interface{}) []string {
+	var ints []string
+	for _, s1 := range src {
+		i1 := InterfaceToString(s1)
+		ints = append(ints, i1)
+	}
+	return ints
+}
+
 func StringToInterfaceArray(s string) ([]interface{}, error) {
 	var ints []interface{}
 	ss := strings.Split(s, ",")
