@@ -63,14 +63,16 @@ func (this TxMapper) FindString(tx *gorm.DB, sql string, args []interface{}) (li
 }
 
 func (this TxMapper) Count(tx *gorm.DB, wrapper *xjtypes.GormWrapper, item interface{}, total *int64) error {
+	wrapper.Current = 0
+	wrapper.Size = 0
 	err := wrapper.SetDb(tx).Model(item).Count(total).Error
 	return err
 }
 
-func (this TxMapper) FindCount(tx *gorm.DB, wrapper *xjtypes.GormWrapper, list interface{}, total *int64) error {
-	err := wrapper.SetDb(tx).Find(list).Offset(0).Limit(-1).Count(total).Error
-	return err
-}
+//func (this TxMapper) FindCount(tx *gorm.DB, wrapper *xjtypes.GormWrapper, list interface{}, total *int64) error {
+//	err := wrapper.SetDb(tx).Find(list).Offset(0).Limit(-1).Count(total).Error
+//	return err
+//}
 
 func (this TxMapper) Update(tx *gorm.DB, wrapper *xjtypes.GormWrapper, item interface{}, column string, value interface{}) (bool, error) {
 	db := wrapper.SetDb(tx).Model(item).Update(column, value)

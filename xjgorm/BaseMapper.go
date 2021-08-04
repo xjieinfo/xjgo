@@ -66,14 +66,16 @@ func (this BaseMapper) FindString(sql string, args []interface{}) (list []map[st
 }
 
 func (this BaseMapper) Count(wrapper *xjtypes.GormWrapper, item interface{}, total *int64) error {
+	wrapper.Current = 0
+	wrapper.Size = 0
 	err := wrapper.SetDb(this.Gorm).Model(item).Count(total).Error
 	return err
 }
 
-func (this BaseMapper) FindCount(wrapper *xjtypes.GormWrapper, list interface{}, total *int64) error {
-	err := wrapper.SetDb(this.Gorm).Find(list).Offset(0).Limit(-1).Count(total).Error
-	return err
-}
+//func (this BaseMapper) FindCount(wrapper *xjtypes.GormWrapper, list interface{}, total *int64) error {
+//	err := wrapper.SetDb(this.Gorm).Find(list).Offset(0).Limit(-1).Count(total).Error
+//	return err
+//}
 
 func (this BaseMapper) Update(wrapper *xjtypes.GormWrapper, item interface{}, column string, value interface{}) (bool, error) {
 	db := wrapper.SetDb(this.Gorm).Model(item).Update(column, value)

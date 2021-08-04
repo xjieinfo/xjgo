@@ -12,6 +12,7 @@ type GormWrapper struct {
 	Current int
 	Size    int
 	Sets    map[string]interface{}
+	Debug   bool
 }
 
 func (this *GormWrapper) Set(field string, val interface{}) *GormWrapper {
@@ -117,6 +118,9 @@ func (this *GormWrapper) SetDb(db *gorm.DB) *gorm.DB {
 	}
 	if this.Size > 0 {
 		db = db.Limit(this.Size)
+	}
+	if this.Debug {
+		db.Debug()
 	}
 	return db
 }
