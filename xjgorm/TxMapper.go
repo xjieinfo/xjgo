@@ -4,6 +4,7 @@ import (
 	"github.com/xjieinfo/xjgo/xjcore/xjconv"
 	"github.com/xjieinfo/xjgo/xjcore/xjtypes"
 	"gorm.io/gorm"
+	"reflect"
 )
 
 type TxMapper struct{}
@@ -69,10 +70,31 @@ func (this TxMapper) Count(tx *gorm.DB, wrapper *xjtypes.GormWrapper, item inter
 	return err
 }
 
-//func (this TxMapper) FindCount(tx *gorm.DB, wrapper *xjtypes.GormWrapper, list interface{}, total *int64) error {
-//	err := wrapper.SetDb(tx).Find(list).Offset(0).Limit(-1).Count(total).Error
-//	return err
-//}
+func (this TxMapper) FindCount(tx *gorm.DB, wrapper *xjtypes.GormWrapper, list interface{}, total *int64) error {
+	err := this.Find(tx, wrapper, list)
+	if err != nil {
+		return err
+	}
+	item := getSliceZeroItem(list)
+	err = this.Count(tx, wrapper, item, total)
+	return err
+}
+
+func (this TxMapper) FindCount2(tx *gorm.DB, wrapper *xjtypes.GormWrapper, list interface{}, total *int64) error {
+	err := this.Find(tx, wrapper, list)
+	if err != nil {
+		return err
+	}
+	list2 := reflect.ValueOf(list).Elem().Interface()
+	len := reflect.ValueOf(list2).Len()
+	if len > 0 {
+		v := reflect.ValueOf(list2).Index(0)
+		ve := v.Interface()
+		err = this.Count(tx, wrapper, ve, total)
+		return err
+	}
+	return nil
+}
 
 func (this TxMapper) Update(tx *gorm.DB, wrapper *xjtypes.GormWrapper, item interface{}, column string, value interface{}) (bool, error) {
 	db := wrapper.SetDb(tx).Model(item).Update(column, value)

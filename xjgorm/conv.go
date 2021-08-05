@@ -3,10 +3,58 @@ package xjgorm
 import (
 	"bytes"
 	"log"
+	"reflect"
 	"strconv"
 	"strings"
 	"unicode"
 )
+
+func getSliceStructName(i interface{}) string {
+	// 这里我想获取数组里面的结构体类型名
+	s := reflect.TypeOf(i).String()
+	return s
+}
+
+func getSliceZeroItem(list interface{}) interface{} {
+	vType := reflect.TypeOf(list).Elem()
+	value := reflect.Zero(vType).Interface()
+	return value
+}
+
+func getSliceTableName(list interface{}) string {
+	vType := reflect.TypeOf(list).Elem()
+	value := reflect.Zero(vType).Interface()
+	vValue := reflect.ValueOf(value)
+	for i := 0; i < vType.NumMethod(); i++ {
+		methodName := vType.Method(i).Name
+		if methodName == "TableName" {
+			values := vValue.Method(i).Call(nil)
+			if len(values) > 0 {
+				name := values[0].String()
+				return name
+			}
+		}
+	}
+	name := reflect.TypeOf(list).Elem().Name()
+	return Camel2Case(name)
+}
+
+func getStructTableName(item interface{}) string {
+	vType := reflect.TypeOf(item)
+	vValue := reflect.ValueOf(item)
+	for i := 0; i < vType.NumMethod(); i++ {
+		methodName := vType.Method(i).Name
+		if methodName == "TableName" {
+			values := vValue.Method(i).Call(nil)
+			if len(values) > 0 {
+				name := values[0].String()
+				return name
+			}
+		}
+	}
+	name := reflect.TypeOf(item).Name()
+	return Camel2Case(name)
+}
 
 // 驼峰式写法转为下划线写法
 func Camel2Case(name string) string {

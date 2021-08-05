@@ -72,10 +72,43 @@ func (this BaseMapper) Count(wrapper *xjtypes.GormWrapper, item interface{}, tot
 	return err
 }
 
-//func (this BaseMapper) FindCount(wrapper *xjtypes.GormWrapper, list interface{}, total *int64) error {
-//	err := wrapper.SetDb(this.Gorm).Find(list).Offset(0).Limit(-1).Count(total).Error
-//	return err
-//}
+func (this BaseMapper) FindCount(wrapper *xjtypes.GormWrapper, list interface{}, total *int64) error {
+	err := this.Find(wrapper, list)
+	if err != nil {
+		return err
+	}
+	item := getSliceZeroItem(list)
+	err = this.Count(wrapper, item, total)
+	return err
+}
+
+func (this BaseMapper) FindCount3(wrapper *xjtypes.GormWrapper, list interface{}, total *int64) error {
+	err := this.Find(wrapper, list)
+	if err != nil {
+		return err
+	}
+	table := getSliceTableName(list)
+	wrapper.Current = 0
+	wrapper.Size = 0
+	err = wrapper.SetDb(this.Gorm).Table(table).Count(total).Error
+	return err
+}
+
+func (this BaseMapper) FindCount2(wrapper *xjtypes.GormWrapper, list interface{}, total *int64) error {
+	err := this.Find(wrapper, list)
+	if err != nil {
+		return err
+	}
+	list2 := reflect.ValueOf(list).Elem().Interface()
+	len := reflect.ValueOf(list2).Len()
+	if len > 0 {
+		v := reflect.ValueOf(list2).Index(0)
+		ve := v.Interface()
+		err = this.Count(wrapper, ve, total)
+		return err
+	}
+	return nil
+}
 
 func (this BaseMapper) Update(wrapper *xjtypes.GormWrapper, item interface{}, column string, value interface{}) (bool, error) {
 	db := wrapper.SetDb(this.Gorm).Model(item).Update(column, value)
@@ -95,21 +128,4 @@ func (this BaseMapper) UpdatesItem(wrapper *xjtypes.GormWrapper, item interface{
 func (this BaseMapper) UpdatesTable(wrapper *xjtypes.GormWrapper, table string) (bool, error) {
 	db := wrapper.SetDb(this.Gorm).Table(table).Updates(wrapper.Sets)
 	return db.RowsAffected > 0, db.Error
-}
-
-func getTableName(item interface{}) string {
-	vType := reflect.TypeOf(item)
-	vValue := reflect.ValueOf(item)
-	for i := 0; i < vType.NumMethod(); i++ {
-		methodName := vType.Method(i).Name
-		if methodName == "TableName" {
-			values := vValue.Method(i).Call(nil)
-			if len(values) > 0 {
-				name := values[0].String()
-				return name
-			}
-		}
-	}
-	name := reflect.TypeOf(item).Name()
-	return Camel2Case(name)
 }
