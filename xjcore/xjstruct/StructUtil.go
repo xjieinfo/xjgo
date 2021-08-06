@@ -287,6 +287,10 @@ func MapToStructWithOutTypeDeep(src map[string]interface{}, dst interface{}) int
 				v, _ := strconv.ParseInt(valueStr, 10, 64)
 				vv := reflect.ValueOf(v)
 				dvalue.Set(vv)
+			case "NullInt64":
+				v, _ := strconv.ParseInt(valueStr, 10, 64)
+				nullInt64 := sql.NullInt64{Valid: true, Int64: v}
+				dvalue.Set(reflect.ValueOf(nullInt64))
 			case "float64":
 				v, _ := strconv.ParseFloat(valueStr, 10)
 				vv := reflect.ValueOf(v)
