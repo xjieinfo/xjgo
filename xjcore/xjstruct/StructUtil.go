@@ -1,6 +1,7 @@
 package xjstruct
 
 import (
+	"database/sql"
 	"encoding/json"
 	"github.com/xjieinfo/xjgo/xjcore/xjtypes"
 	"log"
@@ -273,6 +274,10 @@ func MapToStructWithOutTypeDeep(src map[string]interface{}, dst interface{}) int
 				v, _ := strconv.Atoi(valueStr)
 				vv := reflect.ValueOf(v)
 				dvalue.Set(vv)
+			case "NullInt32":
+				v, _ := strconv.Atoi(valueStr)
+				nullInt32 := sql.NullInt32{Valid: true, Int32: int32(v)}
+				dvalue.Set(reflect.ValueOf(nullInt32))
 			case "int8":
 				v, _ := strconv.Atoi(valueStr)
 				v2 := int8(v)
