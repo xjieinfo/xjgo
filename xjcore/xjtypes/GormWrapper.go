@@ -63,7 +63,7 @@ func (this *GormWrapper) Like(field string, val interface{}) *GormWrapper {
 	if this.Where != "" {
 		this.Where += " and "
 	}
-	this.Where += field + "like('%',?,'%')"
+	this.Where += field + " like concat('%',?,'%')"
 	if this.Args == nil || len(this.Args) == 0 {
 		this.Args = make([]interface{}, 0)
 	}

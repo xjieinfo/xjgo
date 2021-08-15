@@ -275,9 +275,11 @@ func MapToStructWithOutTypeDeep(src map[string]interface{}, dst interface{}) int
 				vv := reflect.ValueOf(v)
 				dvalue.Set(vv)
 			case "NullInt32":
-				v, _ := strconv.Atoi(valueStr)
-				nullInt32 := sql.NullInt32{Valid: true, Int32: int32(v)}
-				dvalue.Set(reflect.ValueOf(nullInt32))
+				v, err := strconv.Atoi(valueStr)
+				if err == nil {
+					nullInt32 := sql.NullInt32{Valid: true, Int32: int32(v)}
+					dvalue.Set(reflect.ValueOf(nullInt32))
+				}
 			case "int8":
 				v, _ := strconv.Atoi(valueStr)
 				v2 := int8(v)
@@ -288,9 +290,11 @@ func MapToStructWithOutTypeDeep(src map[string]interface{}, dst interface{}) int
 				vv := reflect.ValueOf(v)
 				dvalue.Set(vv)
 			case "NullInt64":
-				v, _ := strconv.ParseInt(valueStr, 10, 64)
-				nullInt64 := sql.NullInt64{Valid: true, Int64: v}
-				dvalue.Set(reflect.ValueOf(nullInt64))
+				v, err := strconv.ParseInt(valueStr, 10, 64)
+				if err == nil {
+					nullInt64 := sql.NullInt64{Valid: true, Int64: v}
+					dvalue.Set(reflect.ValueOf(nullInt64))
+				}
 			case "float64":
 				v, _ := strconv.ParseFloat(valueStr, 10)
 				vv := reflect.ValueOf(v)
