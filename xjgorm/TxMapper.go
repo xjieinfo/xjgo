@@ -9,19 +9,19 @@ import (
 
 type TxMapper struct{}
 
-func (this TxMapper) Create(tx *gorm.DB, item interface{}) (bool, error) {
+func (this TxMapper) Create(tx *gorm.DB, item interface{}) (int64, error) {
 	db := tx.Create(item)
-	return db.RowsAffected > 0, db.Error
+	return db.RowsAffected, db.Error
 }
 
-func (this TxMapper) Save(tx *gorm.DB, item interface{}) (bool, error) {
+func (this TxMapper) Save(tx *gorm.DB, item interface{}) (int64, error) {
 	db := tx.Save(item)
-	return db.RowsAffected > 0, db.Error
+	return db.RowsAffected, db.Error
 }
 
-func (this TxMapper) Delete(tx *gorm.DB, wrapper *xjtypes.GormWrapper, item interface{}) (bool, error) {
+func (this TxMapper) Delete(tx *gorm.DB, wrapper *xjtypes.GormWrapper, item interface{}) (int64, error) {
 	db := wrapper.SetDb(tx).Delete(item)
-	return db.RowsAffected > 0, db.Error
+	return db.RowsAffected, db.Error
 }
 
 func (this TxMapper) First(tx *gorm.DB, wrapper *xjtypes.GormWrapper, item interface{}) error {
@@ -96,22 +96,22 @@ func (this TxMapper) FindCount2(tx *gorm.DB, wrapper *xjtypes.GormWrapper, list 
 	return nil
 }
 
-func (this TxMapper) Update(tx *gorm.DB, wrapper *xjtypes.GormWrapper, item interface{}, column string, value interface{}) (bool, error) {
+func (this TxMapper) Update(tx *gorm.DB, wrapper *xjtypes.GormWrapper, item interface{}, column string, value interface{}) (int64, error) {
 	db := wrapper.SetDb(tx).Model(item).Update(column, value)
-	return db.RowsAffected > 0, db.Error
+	return db.RowsAffected, db.Error
 }
 
-func (this TxMapper) Updates(tx *gorm.DB, wrapper *xjtypes.GormWrapper, item interface{}, values interface{}) (bool, error) {
+func (this TxMapper) Updates(tx *gorm.DB, wrapper *xjtypes.GormWrapper, item interface{}, values interface{}) (int64, error) {
 	db := wrapper.SetDb(tx).Model(item).Updates(values)
-	return db.RowsAffected > 0, db.Error
+	return db.RowsAffected, db.Error
 }
 
-func (this TxMapper) UpdatesItem(tx *gorm.DB, wrapper *xjtypes.GormWrapper, item interface{}) (bool, error) {
+func (this TxMapper) UpdatesItem(tx *gorm.DB, wrapper *xjtypes.GormWrapper, item interface{}) (int64, error) {
 	db := wrapper.SetDb(tx).Model(item).Updates(wrapper.Sets)
-	return db.RowsAffected > 0, db.Error
+	return db.RowsAffected, db.Error
 }
 
-func (this TxMapper) UpdatesTable(tx *gorm.DB, wrapper *xjtypes.GormWrapper, table string) (bool, error) {
+func (this TxMapper) UpdatesTable(tx *gorm.DB, wrapper *xjtypes.GormWrapper, table string) (int64, error) {
 	db := wrapper.SetDb(tx).Table(table).Updates(wrapper.Sets)
-	return db.RowsAffected > 0, db.Error
+	return db.RowsAffected, db.Error
 }

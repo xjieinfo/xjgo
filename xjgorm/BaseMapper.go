@@ -11,19 +11,19 @@ type BaseMapper struct {
 	Gorm *gorm.DB
 }
 
-func (this BaseMapper) Create(item interface{}) (bool, error) {
+func (this BaseMapper) Create(item interface{}) (int64, error) {
 	db := this.Gorm.Create(item)
-	return db.RowsAffected > 0, db.Error
+	return db.RowsAffected, db.Error
 }
 
-func (this BaseMapper) Save(item interface{}) (bool, error) {
+func (this BaseMapper) Save(item interface{}) (int64, error) {
 	db := this.Gorm.Save(item)
-	return db.RowsAffected > 0, db.Error
+	return db.RowsAffected, db.Error
 }
 
-func (this BaseMapper) Delete(wrapper *xjtypes.GormWrapper, item interface{}) (bool, error) {
+func (this BaseMapper) Delete(wrapper *xjtypes.GormWrapper, item interface{}) (int64, error) {
 	db := wrapper.SetDb(this.Gorm).Delete(item)
-	return db.RowsAffected > 0, db.Error
+	return db.RowsAffected, db.Error
 }
 
 func (this BaseMapper) First(wrapper *xjtypes.GormWrapper, item interface{}) error {
@@ -110,22 +110,22 @@ func (this BaseMapper) FindCount2(wrapper *xjtypes.GormWrapper, list interface{}
 	return nil
 }
 
-func (this BaseMapper) Update(wrapper *xjtypes.GormWrapper, item interface{}, column string, value interface{}) (bool, error) {
+func (this BaseMapper) Update(wrapper *xjtypes.GormWrapper, item interface{}, column string, value interface{}) (int64, error) {
 	db := wrapper.SetDb(this.Gorm).Model(item).Update(column, value)
-	return db.RowsAffected > 0, db.Error
+	return db.RowsAffected, db.Error
 }
 
-func (this BaseMapper) Updates(wrapper *xjtypes.GormWrapper, item interface{}, values interface{}) (bool, error) {
+func (this BaseMapper) Updates(wrapper *xjtypes.GormWrapper, item interface{}, values interface{}) (int64, error) {
 	db := wrapper.SetDb(this.Gorm).Model(item).Updates(values)
-	return db.RowsAffected > 0, db.Error
+	return db.RowsAffected, db.Error
 }
 
-func (this BaseMapper) UpdatesItem(wrapper *xjtypes.GormWrapper, item interface{}) (bool, error) {
+func (this BaseMapper) UpdatesItem(wrapper *xjtypes.GormWrapper, item interface{}) (int64, error) {
 	db := wrapper.SetDb(this.Gorm).Model(item).Updates(wrapper.Sets)
-	return db.RowsAffected > 0, db.Error
+	return db.RowsAffected, db.Error
 }
 
-func (this BaseMapper) UpdatesTable(wrapper *xjtypes.GormWrapper, table string) (bool, error) {
+func (this BaseMapper) UpdatesTable(wrapper *xjtypes.GormWrapper, table string) (int64, error) {
 	db := wrapper.SetDb(this.Gorm).Table(table).Updates(wrapper.Sets)
-	return db.RowsAffected > 0, db.Error
+	return db.RowsAffected, db.Error
 }
