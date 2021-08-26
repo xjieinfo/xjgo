@@ -53,7 +53,7 @@ func Test_Transaction(t *testing.T) {
 		if er != nil {
 			return er
 		}
-		if !ok {
+		if ok > 0 {
 			return errors.New("update error.")
 		}
 		return nil
