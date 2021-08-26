@@ -23,11 +23,12 @@ func (this *GormWrapper) Set(field string, val interface{}) *GormWrapper {
 	return this
 }
 
+//EQ 就是 EQUAL等于
 func (this *GormWrapper) Eq(field string, val interface{}) *GormWrapper {
 	if this.Where != "" {
 		this.Where += " and "
 	}
-	this.Where += field + "=?"
+	this.Where += field + " = ?"
 	if this.Args == nil || len(this.Args) == 0 {
 		this.Args = make([]interface{}, 0)
 	}
@@ -35,11 +36,25 @@ func (this *GormWrapper) Eq(field string, val interface{}) *GormWrapper {
 	return this
 }
 
+//NE 就是 NOT EQUAL不等于
+func (this *GormWrapper) Ne(field string, val interface{}) *GormWrapper {
+	if this.Where != "" {
+		this.Where += " and "
+	}
+	this.Where += field + " != ?"
+	if this.Args == nil || len(this.Args) == 0 {
+		this.Args = make([]interface{}, 0)
+	}
+	this.Args = append(this.Args, val)
+	return this
+}
+
+//GREATER THAN OR EQUAL 大于等于
 func (this *GormWrapper) Ge(field string, val interface{}) *GormWrapper {
 	if this.Where != "" {
 		this.Where += " and "
 	}
-	this.Where += field + ">=?"
+	this.Where += field + " >= ?"
 	if this.Args == nil || len(this.Args) == 0 {
 		this.Args = make([]interface{}, 0)
 	}
@@ -47,11 +62,38 @@ func (this *GormWrapper) Ge(field string, val interface{}) *GormWrapper {
 	return this
 }
 
+//GREATER THAN大于
+func (this *GormWrapper) Gt(field string, val interface{}) *GormWrapper {
+	if this.Where != "" {
+		this.Where += " and "
+	}
+	this.Where += field + " > ?"
+	if this.Args == nil || len(this.Args) == 0 {
+		this.Args = make([]interface{}, 0)
+	}
+	this.Args = append(this.Args, val)
+	return this
+}
+
+//LE 就是 LESS THAN OR EQUAL 小于等于
 func (this *GormWrapper) Le(field string, val interface{}) *GormWrapper {
 	if this.Where != "" {
 		this.Where += " and "
 	}
-	this.Where += field + "<=?"
+	this.Where += field + " <= ?"
+	if this.Args == nil || len(this.Args) == 0 {
+		this.Args = make([]interface{}, 0)
+	}
+	this.Args = append(this.Args, val)
+	return this
+}
+
+//LT 就是 LESS THAN小于
+func (this *GormWrapper) Lt(field string, val interface{}) *GormWrapper {
+	if this.Where != "" {
+		this.Where += " and "
+	}
+	this.Where += field + "<?"
 	if this.Args == nil || len(this.Args) == 0 {
 		this.Args = make([]interface{}, 0)
 	}
