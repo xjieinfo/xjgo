@@ -14,7 +14,7 @@ xjgo is a Web and RPC framework that includes some useful tools.
 ## how to use excel
 [example](examples/exceldemo/exceldemo.go)
 
-## xjutils
+## xjtypes
 1. Page:Data paging display structure
 2. R:API Result return structure
 3. GormWrapper:gorm Query the conditional wrapper structure
