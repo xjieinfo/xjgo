@@ -20,6 +20,7 @@ type Route struct {
 	Method   string
 	Pattern  string
 	Handlers []HandlerFunc
+	Power    string
 }
 
 func Default() *Engine {
@@ -33,7 +34,7 @@ func Default() *Engine {
 
 type HandlerFunc func(*Context)
 
-func (engine *Engine) HandleFunc(method, pattern string, handler func(*Context)) {
+func (engine *Engine) HandleFunc(method, pattern, power string, handler func(*Context)) {
 	//_handler := func(w http.ResponseWriter, r *http.Request) {
 	//	handler(&Context{
 	//		Request: r,
@@ -47,36 +48,37 @@ func (engine *Engine) HandleFunc(method, pattern string, handler func(*Context))
 		Method:   method,
 		Pattern:  pattern,
 		Handlers: _handlers,
+		Power:    power,
 	}
 	engine.routes = append(engine.routes, route)
 }
 
-func (engine *Engine) POST(pattern string, handler func(*Context)) {
-	engine.HandleFunc(http.MethodPost, pattern, handler)
+func (engine *Engine) POST(pattern, power string, handler func(*Context)) {
+	engine.HandleFunc(http.MethodPost, pattern, power, handler)
 }
 
-func (engine *Engine) GET(pattern string, handler func(*Context)) {
-	engine.HandleFunc(http.MethodGet, pattern, handler)
+func (engine *Engine) GET(pattern, power string, handler func(*Context)) {
+	engine.HandleFunc(http.MethodGet, pattern, power, handler)
 }
 
-func (engine *Engine) DELETE(pattern string, handler func(*Context)) {
-	engine.HandleFunc(http.MethodDelete, pattern, handler)
+func (engine *Engine) DELETE(pattern, power string, handler func(*Context)) {
+	engine.HandleFunc(http.MethodDelete, pattern, power, handler)
 }
 
-func (engine *Engine) PATCH(pattern string, handler func(*Context)) {
-	engine.HandleFunc(http.MethodPatch, pattern, handler)
+func (engine *Engine) PATCH(pattern, power string, handler func(*Context)) {
+	engine.HandleFunc(http.MethodPatch, pattern, power, handler)
 }
 
-func (engine *Engine) PUT(pattern string, handler func(*Context)) {
-	engine.HandleFunc(http.MethodPut, pattern, handler)
+func (engine *Engine) PUT(pattern, power string, handler func(*Context)) {
+	engine.HandleFunc(http.MethodPut, pattern, power, handler)
 }
 
-func (engine *Engine) OPTIONS(pattern string, handler func(*Context)) {
-	engine.HandleFunc(http.MethodOptions, pattern, handler)
+func (engine *Engine) OPTIONS(pattern, power string, handler func(*Context)) {
+	engine.HandleFunc(http.MethodOptions, pattern, power, handler)
 }
 
-func (engine *Engine) HEAD(pattern string, handler func(*Context)) {
-	engine.HandleFunc(http.MethodHead, pattern, handler)
+func (engine *Engine) HEAD(pattern, power string, handler func(*Context)) {
+	engine.HandleFunc(http.MethodHead, pattern, power, handler)
 }
 
 // Use attaches a global middleware to the router.
@@ -111,7 +113,8 @@ func (engine *Engine) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	for _, route := range engine.routes {
 		if r.Method == route.Method && r.URL.Path == route.Pattern {
 			log.Printf("method: %s, path: %s \n", route.Method, r.RequestURI)
-			r.Header.Set("traceid", uuid.New().String())
+			r.Header.Set("xjgo-traceid", uuid.New().String())
+			r.Header.Set("xjgo-power", route.Power)
 			route.Handlers[0](&Context{Request: r, Writer: w, handlers: route.Handlers})
 			return
 		}
@@ -134,8 +137,9 @@ func (engine *Engine) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 	route := engine.GetRoute(mapRoute)
 	r.Header.Set("xjgo-path-pattern", route.Pattern)
-	r.Header.Set("traceid", uuid.New().String())
+	r.Header.Set("xjgo-traceid", uuid.New().String())
 	log.Printf("method: %s, path: %s, pattern: %s \n", route.Method, r.RequestURI, route.Pattern)
+	r.Header.Set("xjgo-power", route.Power)
 	route.Handlers[0](&Context{Request: r, Writer: w, handlers: route.Handlers})
 }
 
