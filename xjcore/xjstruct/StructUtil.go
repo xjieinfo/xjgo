@@ -285,6 +285,11 @@ func MapToStructWithOutTypeDeep(src map[string]interface{}, dst interface{}) int
 				v2 := int8(v)
 				vv := reflect.ValueOf(v2)
 				dvalue.Set(vv)
+			case "int16":
+				v, _ := strconv.Atoi(valueStr)
+				v2 := int16(v)
+				vv := reflect.ValueOf(v2)
+				dvalue.Set(vv)
 			case "int64":
 				v, _ := strconv.ParseInt(valueStr, 10, 64)
 				vv := reflect.ValueOf(v)

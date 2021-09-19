@@ -6,15 +6,21 @@ import (
 
 func main() {
 	xjhttp := xjhttp.Default()
-	xjhttp.HandleFunc("GET", "/str", Str)
-	xjhttp.GET("/success", Success)
-	xjhttp.GET("/fail", Fail)
-	xjhttp.GET("/make", Make)
-	xjhttp.POST("/:order", order)
-	xjhttp.PUT("/user/saler/:userName", saler)
-	xjhttp.DELETE("/user/:id/xyz", xyz)
-	xjhttp.GET("/ctx", okctx)
+	xjhttp.HandleFunc("GET", "/str", "", Str)
+	xjhttp.GET("/", "", Hello)
+	xjhttp.GET("/success", "", Success)
+	xjhttp.GET("/fail", "", Fail)
+	xjhttp.GET("/make", "", Make)
+	xjhttp.POST("/:order", "", order)
+	xjhttp.PUT("/user/saler/:userName", "", saler)
+	xjhttp.DELETE("/user/:id/xyz", "", xyz)
+	xjhttp.GET("/ctx", "", okctx)
 	xjhttp.Run(":6001")
+}
+
+func Hello(ctx *xjhttp.Context) {
+	name := "xjgo"
+	ctx.String(200, "hello %s .", name)
 }
 
 func Str(ctx *xjhttp.Context) {
