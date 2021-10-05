@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"github.com/tidwall/gjson"
 	"github.com/xjieinfo/xjgo/xjcache"
 	"github.com/xjieinfo/xjgo/xjcore/xjstruct"
 	"github.com/xjieinfo/xjgo/xjcore/xjtypes"
@@ -44,6 +45,42 @@ func (c *Context) BodyJson(obj interface{}) error {
 	}
 	err = json.Unmarshal([]byte(str), obj)
 	return err
+}
+
+func (c *Context) BodyGetInt(key string) (int, error) {
+	str, err := c.Body()
+	if err != nil {
+		return 0, err
+	}
+	val := gjson.Get(str, key).Int()
+	return int(val), nil
+}
+
+func (c *Context) BodyGetInt64(key string) (int64, error) {
+	str, err := c.Body()
+	if err != nil {
+		return 0, err
+	}
+	val := gjson.Get(str, key).Int()
+	return val, nil
+}
+
+func (c *Context) BodyGetUint(key string) (uint, error) {
+	str, err := c.Body()
+	if err != nil {
+		return 0, err
+	}
+	val := gjson.Get(str, key).Uint()
+	return uint(val), nil
+}
+
+func (c *Context) BodyGetUint64(key string) (uint64, error) {
+	str, err := c.Body()
+	if err != nil {
+		return 0, err
+	}
+	val := gjson.Get(str, key).Uint()
+	return val, nil
 }
 
 func (c *Context) Body() (string, error) {
