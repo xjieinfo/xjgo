@@ -83,6 +83,15 @@ func (c *Context) BodyGetUint64(key string) (uint64, error) {
 	return val, nil
 }
 
+func (c *Context) BodyGetStr(key string) (string, error) {
+	str, err := c.Body()
+	if err != nil {
+		return "", err
+	}
+	val := gjson.Get(str, key).Str
+	return val, nil
+}
+
 func (c *Context) Body() (string, error) {
 	body, err := ioutil.ReadAll(c.Request.Body)
 	//c.Request.Body.Close()
