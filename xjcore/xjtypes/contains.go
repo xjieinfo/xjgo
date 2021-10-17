@@ -19,6 +19,15 @@ func ContainsInt(list []int, val int) bool {
 	return false
 }
 
+func ContainsUint(list []uint, val uint) bool {
+	for _, each := range list {
+		if each == val {
+			return true
+		}
+	}
+	return false
+}
+
 func ContainsInt64(list []int64, val int64) bool {
 	for _, each := range list {
 		if each == val {
