@@ -15,9 +15,9 @@ func (engine *Engine) Group(group string) *RouterGroup {
 }
 
 func (group *RouterGroup) GET(pattern, power string, handler func(*Context)) {
-	group.engine.HandleFunc(http.MethodGet, power, group.group+pattern, handler)
+	group.engine.HandleFunc(http.MethodGet, group.group+pattern, power, handler)
 }
 
 func (group *RouterGroup) DELETE(pattern, power string, handler func(*Context)) {
-	group.engine.HandleFunc(http.MethodDelete, power, group.group+pattern, handler)
+	group.engine.HandleFunc(http.MethodDelete, group.group+pattern, power, handler)
 }
