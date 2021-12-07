@@ -21,3 +21,11 @@ func (group *RouterGroup) GET(pattern, power string, handler func(*Context)) {
 func (group *RouterGroup) DELETE(pattern, power string, handler func(*Context)) {
 	group.engine.HandleFunc(http.MethodDelete, group.group+pattern, power, handler)
 }
+
+func (group *RouterGroup) POST(pattern, power string, handler func(*Context)) {
+	group.engine.HandleFunc(http.MethodPost, group.group+pattern, power, handler)
+}
+
+func (group *RouterGroup) PUT(pattern, power string, handler func(*Context)) {
+	group.engine.HandleFunc(http.MethodPut, group.group+pattern, power, handler)
+}
